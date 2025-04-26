@@ -86,26 +86,29 @@ public class UsersService {
     private void addProgram(String patientUsername, String programName) {
         if (programName != null) {
             Users patient = userRepo.findByUserName(patientUsername);
+            if (patient == null) {
+                throw new RuntimeException("Patient not found!");
+            }
+
             if (patient.getPrograms() == null) {
                 patient.setPrograms(new ArrayList<>());
             }
 
-
             String[] nameArray = programName.split(",");
 
-
             for (String name : nameArray) {
-
                 HealthPrograms program = healthProgramsRepo.findByProgramName(name.trim());
+                if (program == null) {
+                    throw new RuntimeException("Program not found: " + name.trim());
+                }
 
                 if (!patient.getPrograms().contains(program)) {
                     patient.getPrograms().add(program);
                     program.getUsers().add(patient);
-
-                    userRepo.save(patient);
-                    healthProgramsRepo.save(program);
                 }
             }
+
+            userRepo.save(patient);
 
         }
 
