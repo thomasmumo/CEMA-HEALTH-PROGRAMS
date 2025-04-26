@@ -121,6 +121,7 @@ public class UsersService {
                         user.getName(),
                         user.getUserName(),
                         user.getEmail(),
+                        user.getRole(),
                         user.getPrograms()
                 ))
                 .toList();
@@ -132,6 +133,7 @@ public class UsersService {
                 user.getName(),
                 user.getUserName(),
                 user.getEmail(),
+                user.getRole(),
                 user.getPrograms()
         );
         return response;

@@ -8,6 +8,7 @@ public record UsersResponseDto(
         String name,
         String username,
         String email,
+        String role,
         List<HealthPrograms> programs
 ) {
 }
