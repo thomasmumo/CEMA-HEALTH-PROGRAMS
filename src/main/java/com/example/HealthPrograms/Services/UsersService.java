@@ -74,7 +74,6 @@ public class UsersService {
         user.setEmail(dto.email());
         user.setPassword(encoder.encode(dto.password()));
         user.setRole(dto.role());
-        HealthPrograms program = new HealthPrograms();
         userRepo.save(user);
         addProgram(dto.userName(),dto.programName() );
         Map<String, String> response = new HashMap<>();
@@ -85,27 +84,29 @@ public class UsersService {
     }
 
     private void addProgram(String patientUsername, String programName) {
-
-        Users patient = userRepo.findByUserName(patientUsername);
-        if (patient.getPrograms() == null) {
-            patient.setPrograms(new ArrayList<>());
-        }
-
-
-        String[] nameArray = programName.split(",");
-
-
-        for (String name : nameArray) {
-
-            HealthPrograms program = healthProgramsRepo.findByProgramName(name.trim());
-
-            if (!patient.getPrograms().contains(program)) {
-                patient.getPrograms().add(program);
-                program.getUsers().add(patient);
-
-                userRepo.save(patient);
-                healthProgramsRepo.save(program);
+        if (programName != null) {
+            Users patient = userRepo.findByUserName(patientUsername);
+            if (patient.getPrograms() == null) {
+                patient.setPrograms(new ArrayList<>());
             }
+
+
+            String[] nameArray = programName.split(",");
+
+
+            for (String name : nameArray) {
+
+                HealthPrograms program = healthProgramsRepo.findByProgramName(name.trim());
+
+                if (!patient.getPrograms().contains(program)) {
+                    patient.getPrograms().add(program);
+                    program.getUsers().add(patient);
+
+                    userRepo.save(patient);
+                    healthProgramsRepo.save(program);
+                }
+            }
+
         }
 
 
